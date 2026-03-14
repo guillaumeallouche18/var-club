@@ -274,11 +274,16 @@ function App(){
   const launch=()=>{setScanning(true);setTimeout(()=>{setScanning(false);setRevealed(true);},900);};
   const reset=()=>{setClub(null);setQuestion(null);setRevealed(false);setSearch('');};
 
-  const getAns=(cid,qid)=>{
-    if(!answers[cid]) return null;
-    return answers[cid][String(qid)] ?? [];
-  };
-
+ {ans.map((p,i)=>{
+  const name = p && typeof p === 'object' ? p.name : String(p);
+  const photo = p && typeof p === 'object' ? p.photo : null;
+  return (
+    <span key={i} className={`tag ${tagCls}`} style={{animationDelay:`${i*0.04}s`, display:'inline-flex', alignItems:'center', gap:'6px'}}>
+      {photo && <img src={photo} style={{width:'20px',height:'20px',borderRadius:'50%',objectFit:'cover'}} onError={e=>e.target.style.display='none'}/>}
+      {name}
+    </span>
+  );
+})}
   const ans=club&&question?getAns(club.id,question.id):null;
   const step=!club?1:!question?2:3;
   const qCat=question?.cat||'nat';

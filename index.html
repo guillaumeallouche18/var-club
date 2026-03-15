@@ -5,153 +5,187 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VAR CLUB – Duel VAR</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --navy:#0d1b2a;--navy2:#162033;--electric:#00d4ff;--lime:#b6ff4e;
-  --coral:#ff4757;--gold:#ffcc00;--white:#ffffff;--slate:#7a8fa6;--r:12px;
+  --pitch:#0a1a0f;
+  --pitch2:#0f2416;
+  --pitch3:#162e1c;
+  --grass:#2d7a3a;
+  --grass2:#3a9e4a;
+  --lime:#a8e63d;
+  --white:#f0f4e8;
+  --cream:#d4e8c2;
+  --amber:#f5c842;
+  --red:#e8342a;
+  --slate:#6b8f72;
+  --r:10px;
 }
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-@keyframes scanDown{0%{top:-4px;opacity:1}100%{top:100%;opacity:0}}
-@keyframes tagAppear{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes scanDown{0%{top:0;opacity:1}100%{top:100%;opacity:0}}
+@keyframes tagIn{0%{opacity:0;transform:translateY(6px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes flicker{0%,100%{opacity:1}92%{opacity:.97}94%{opacity:.85}96%{opacity:.97}}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(168,230,61,.2)}50%{box-shadow:0 0 40px rgba(168,230,61,.45)}}
 
-html,body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;min-height:100vh;}
-.topbar{background:var(--navy2);border-bottom:3px solid var(--electric);padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,212,255,0.12);}
+html,body{
+  background:var(--pitch);color:var(--white);
+  font-family:'Barlow Condensed',sans-serif;min-height:100vh;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(45,122,58,.04) 40px,rgba(45,122,58,.04) 41px),
+    repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(45,122,58,.03) 40px,rgba(45,122,58,.03) 41px);
+}
+
+.topbar{background:rgba(10,26,15,.95);border-bottom:3px solid var(--grass);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);box-shadow:0 4px 32px rgba(45,122,58,.2);}
 .brand{display:flex;align-items:center;gap:14px;}
-.brand-name{font-family:'Bebas Neue',cursive;font-size:38px;letter-spacing:4px;color:var(--white);line-height:1;}
-.brand-pipe{width:3px;height:32px;background:var(--electric);border-radius:2px;}
-.mode-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:3px;color:var(--electric);text-transform:uppercase;}
-.topbar-mid{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,.4);}
-.topbar-mid .hl{color:var(--white);font-weight:700;}
+.brand-name{font-family:'Bebas Neue',cursive;font-size:36px;letter-spacing:5px;color:var(--white);line-height:1;text-shadow:0 0 20px rgba(168,230,61,.3);animation:flicker 8s ease infinite;}
+.brand-pipe{width:3px;height:28px;background:var(--grass2);border-radius:2px;}
+.mode-label{font-size:11px;font-weight:800;letter-spacing:4px;color:var(--lime);text-transform:uppercase;}
+.topbar-mid{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:700;color:rgba(240,244,232,.35);}
+.topbar-mid .hl{color:var(--lime);}
 .topbar-right{display:flex;align-items:center;gap:10px;}
-.live-pill{display:flex;align-items:center;gap:7px;background:var(--coral);padding:5px 14px;border-radius:20px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;box-shadow:0 0 16px rgba(255,71,87,.4);}
-.live-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1.1s ease-in-out infinite;}
-.var-pill{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:3px;background:linear-gradient(135deg,var(--electric),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.live-pill{display:flex;align-items:center;gap:7px;background:var(--red);padding:5px 14px;border-radius:4px;font-family:'Bebas Neue',cursive;font-size:15px;letter-spacing:3px;box-shadow:0 0 12px rgba(232,52,42,.5);}
+.live-dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1s infinite;}
+
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:16px;}
-.spinner{width:40px;height:40px;border:3px solid rgba(0,212,255,.2);border-top-color:var(--electric);border-radius:50%;animation:spin .8s linear infinite;}
-.loading-text{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;color:var(--slate);}
-.error-banner{background:rgba(255,71,87,.12);border:1px solid rgba(255,71,87,.3);border-radius:var(--r);padding:16px 20px;margin:20px 0;font-size:13px;font-weight:600;color:var(--coral);}
-.page{max-width:1080px;margin:0 auto;padding:32px 24px 80px;}
-.stepbar{display:flex;align-items:center;gap:0;margin-bottom:32px;background:var(--navy2);border-radius:var(--r);border:1px solid rgba(255,255,255,.07);overflow:hidden;animation:fadeUp .4s ease both;}
-.step-item{flex:1;display:flex;align-items:center;gap:10px;padding:14px 20px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;color:var(--slate);border-right:1px solid rgba(255,255,255,.07);transition:all .25s;}
+.spinner{width:36px;height:36px;border:3px solid rgba(168,230,61,.15);border-top-color:var(--lime);border-radius:50%;animation:spin .7s linear infinite;}
+.loading-text{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--slate);text-transform:uppercase;}
+.error-banner{background:rgba(232,52,42,.1);border:1px solid rgba(232,52,42,.3);border-radius:var(--r);padding:14px 18px;margin:16px 0;font-size:13px;font-weight:600;color:var(--red);}
+
+.page{max-width:1060px;margin:0 auto;padding:28px 20px 80px;}
+
+/* STEPS */
+.stepbar{display:flex;align-items:center;margin-bottom:28px;background:var(--pitch2);border-radius:var(--r);border:1px solid rgba(45,122,58,.2);overflow:hidden;animation:fadeUp .4s ease both;}
+.step-item{flex:1;display:flex;align-items:center;gap:9px;padding:13px 18px;font-size:12px;font-weight:800;letter-spacing:1px;color:var(--slate);border-right:1px solid rgba(45,122,58,.15);transition:all .25s;}
 .step-item:last-child{border-right:none;}
-.step-item.on{color:var(--white);background:rgba(0,212,255,.08);}
-.step-item.done{color:var(--lime);}
-.step-num{width:26px;height:26px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;transition:all .25s;}
-.step-item.on .step-num{background:var(--electric);border-color:var(--electric);color:var(--navy);}
-.step-item.done .step-num{background:var(--lime);border-color:var(--lime);color:var(--navy);}
-.step-reset{margin-left:auto;padding-right:16px;}
-.reset-btn{background:none;border:none;font-family:'Barlow',sans-serif;font-size:12px;font-weight:600;color:var(--slate);cursor:pointer;text-decoration:underline;transition:color .15s;}
-.reset-btn:hover{color:var(--coral);}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;}
-@media(max-width:700px){.two-col{grid-template-columns:1fr;}}
-.sh{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
-.sh-num{font-family:'Bebas Neue',cursive;font-size:32px;background:linear-gradient(135deg,var(--electric),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
-.sh-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;color:var(--slate);text-transform:uppercase;}
-.picker-box{background:var(--navy2);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);animation:fadeUp .45s ease .05s both;}
-.picker-inner{padding:18px;}
+.step-item.on{color:var(--lime);background:rgba(168,230,61,.06);}
+.step-item.done{color:var(--grass2);}
+.step-num{width:24px;height:24px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;}
+.step-item.on .step-num{background:var(--lime);border-color:var(--lime);color:var(--pitch);}
+.step-item.done .step-num{background:var(--grass2);border-color:var(--grass2);color:var(--pitch);}
+.step-reset{margin-left:auto;padding-right:14px;}
+.reset-btn{background:none;border:none;font-size:11px;font-weight:700;color:var(--slate);cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:color .15s;}
+.reset-btn:hover{color:var(--red);}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+@media(max-width:680px){.two-col{grid-template-columns:1fr;}}
+
+.sh{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.sh-num{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--lime);line-height:1;}
+.sh-label{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--slate);text-transform:uppercase;}
+
+/* PICKER */
+.picker-box{background:var(--pitch2);border:1.5px solid rgba(45,122,58,.25);border-radius:var(--r);animation:fadeUp .45s ease both;}
+.picker-inner{padding:14px;}
 .search-wrap{position:relative;}
-.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--slate);pointer-events:none;}
-.search-inp{width:100%;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px 12px 38px;font-family:'Barlow',sans-serif;font-size:14px;font-weight:500;color:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;}
-.search-inp:focus{border-color:var(--electric);box-shadow:0 0 0 3px rgba(0,212,255,.12);}
+.search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--slate);pointer-events:none;}
+.search-inp{width:100%;background:rgba(255,255,255,.04);border:1.5px solid rgba(45,122,58,.2);border-radius:6px;padding:10px 12px 10px 32px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;}
+.search-inp:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(168,230,61,.1);}
 .search-inp::placeholder{color:var(--slate);}
-.dropdown{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--navy2);border:1.5px solid rgba(255,255,255,.12);border-radius:var(--r);max-height:280px;overflow-y:auto;z-index:300;box-shadow:0 24px 60px rgba(0,0,0,.6);}
-.dropdown::-webkit-scrollbar{width:4px;}
-.dropdown::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:4px;}
-.dg-label{padding:7px 14px 4px;font-size:9px;font-weight:800;letter-spacing:2px;color:var(--slate);text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);}
-.di{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.04);transition:background .12s;}
-.di:hover{background:rgba(0,212,255,.08);}
-.di.sel{background:rgba(0,212,255,.12);color:var(--electric);}
-.di .has-data{font-size:9px;font-weight:800;color:var(--lime);background:rgba(182,255,78,.12);border:1px solid rgba(182,255,78,.25);padding:2px 6px;border-radius:4px;margin-left:auto;}
-.di .no-data-badge{font-size:9px;font-weight:700;color:var(--slate);margin-left:auto;opacity:.5;}
-.club-chip{margin-top:12px;display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(182,255,78,.08));border:1.5px solid rgba(0,212,255,.25);border-radius:10px;padding:12px 16px;animation:fadeUp .25s ease both;}
-.chip-flag{font-size:24px;}
+.dropdown{position:absolute;top:calc(100%+4px);left:0;right:0;background:#0c1f11;border:1.5px solid rgba(45,122,58,.35);border-radius:var(--r);max-height:260px;overflow-y:auto;z-index:300;box-shadow:0 20px 50px rgba(0,0,0,.7);}
+.dropdown::-webkit-scrollbar{width:3px;}
+.dropdown::-webkit-scrollbar-thumb{background:var(--grass);border-radius:3px;}
+.dg-label{padding:6px 12px 3px;font-size:9px;font-weight:800;letter-spacing:2px;color:var(--grass2);text-transform:uppercase;border-bottom:1px solid rgba(45,122,58,.12);}
+.di{padding:9px 12px;cursor:pointer;font-size:13px;font-weight:700;display:flex;align-items:center;gap:9px;border-bottom:1px solid rgba(45,122,58,.07);transition:background .1s;}
+.di:hover,.di.sel{background:rgba(168,230,61,.08);color:var(--lime);}
+.di .has-data{font-size:8px;font-weight:800;color:var(--lime);background:rgba(168,230,61,.1);border:1px solid rgba(168,230,61,.2);padding:2px 6px;border-radius:3px;margin-left:auto;}
+.di .no-data{font-size:8px;color:var(--slate);margin-left:auto;opacity:.5;}
+
+.club-chip{margin-top:10px;display:flex;align-items:center;gap:10px;background:rgba(168,230,61,.06);border:1.5px solid rgba(168,230,61,.2);border-radius:8px;padding:11px 14px;animation:fadeUp .2s ease both;}
+.chip-flag{font-size:20px;}
 .chip-info{flex:1;}
-.chip-name{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:var(--electric);letter-spacing:.5px;}
-.chip-league{font-size:11px;color:var(--slate);font-weight:500;margin-top:1px;}
-.chip-x{cursor:pointer;color:var(--slate);font-size:20px;transition:color .15s;}
-.chip-x:hover{color:var(--coral);}
-.status-box{background:var(--navy2);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;justify-content:center;min-height:140px;animation:fadeUp .45s ease .1s both;}
-.status-idle{font-size:14px;color:var(--slate);font-weight:500;line-height:1.7;}
-.status-club-name{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;color:var(--white);margin-bottom:2px;}
-.status-q-text{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--electric);margin-bottom:14px;}
-.btn-launch{display:inline-flex;align-items:center;gap:9px;padding:12px 26px;border-radius:8px;border:none;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:1px;cursor:pointer;transition:all .18s;background:linear-gradient(135deg,var(--electric),var(--lime));color:var(--navy);box-shadow:0 4px 20px rgba(0,212,255,.35);}
-.btn-launch:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,212,255,.45);}
-.btn-launch:disabled{background:rgba(255,255,255,.12);color:var(--slate);box-shadow:none;transform:none;cursor:not-allowed;}
-.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:all .18s;background:transparent;border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);}
-.btn-ghost:hover{border-color:var(--electric);color:var(--electric);}
-.q-section{animation:fadeUp .45s ease .15s both;margin-bottom:28px;}
-.cat-block{margin-bottom:22px;}
-.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,.07);}
-.cat-badge{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;}
-.cat-badge.nat{background:rgba(0,212,255,.15);color:var(--electric);border:1px solid rgba(0,212,255,.3);}
-.cat-badge.pal{background:rgba(255,204,0,.15);color:var(--gold);border:1px solid rgba(255,204,0,.3);}
-.cat-badge.pro{background:rgba(182,255,78,.12);color:var(--lime);border:1px solid rgba(182,255,78,.3);}
-.cat-badge.sta{background:rgba(255,71,87,.12);color:var(--coral);border:1px solid rgba(255,71,87,.3);}
-.cat-count{font-size:11px;color:var(--slate);font-weight:500;margin-left:auto;}
-.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;}
-.q-card{background:var(--navy2);border:1.5px solid rgba(255,255,255,.07);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;}
-.q-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:transparent;transition:all .18s;}
-.q-card:hover{border-color:rgba(0,212,255,.35);background:rgba(0,212,255,.05);transform:translateY(-1px);}
-.q-card:hover::after{background:var(--electric);}
-.q-card.on{border-color:rgba(0,212,255,.5);background:rgba(0,212,255,.1);}
-.q-card.on::after{background:var(--electric);}
-.q-card.on.pal{border-color:rgba(255,204,0,.5);background:rgba(255,204,0,.08);}
-.q-card.on.pal::after{background:var(--gold);}
-.q-card.on.pro{border-color:rgba(182,255,78,.5);background:rgba(182,255,78,.07);}
-.q-card.on.pro::after{background:var(--lime);}
-.q-card.on.sta{border-color:rgba(255,71,87,.5);background:rgba(255,71,87,.08);}
-.q-card.on.sta::after{background:var(--coral);}
-.q-num{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--slate);margin-bottom:5px;}
-.q-card.on .q-num{color:var(--electric);}
-.q-card.on.pal .q-num{color:var(--gold);}
-.q-card.on.pro .q-num{color:var(--lime);}
-.q-card.on.sta .q-num{color:var(--coral);}
-.q-text{font-size:12px;font-weight:600;color:rgba(255,255,255,.75);line-height:1.35;}
+.chip-name{font-size:16px;font-weight:800;color:var(--lime);}
+.chip-league{font-size:10px;color:var(--slate);font-weight:600;margin-top:1px;}
+.chip-x{cursor:pointer;color:var(--slate);font-size:16px;transition:color .15s;}
+.chip-x:hover{color:var(--red);}
+
+/* STATUS */
+.status-box{background:var(--pitch2);border:1.5px solid rgba(45,122,58,.2);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;justify-content:center;min-height:130px;animation:fadeUp .45s ease both;}
+.status-idle{font-size:13px;color:var(--slate);font-weight:600;line-height:1.7;}
+.status-club-name{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:2px;color:var(--white);margin-bottom:2px;}
+.status-q-text{font-size:14px;font-weight:700;color:var(--lime);margin-bottom:12px;letter-spacing:.3px;}
+.btn-launch{display:inline-flex;align-items:center;gap:8px;padding:11px 24px;border-radius:6px;border:none;font-family:'Bebas Neue',cursive;font-size:16px;letter-spacing:2px;cursor:pointer;transition:all .18s;background:linear-gradient(135deg,var(--grass),var(--lime));color:var(--pitch);box-shadow:0 4px 20px rgba(168,230,61,.3);animation:pulse 3s ease infinite;}
+.btn-launch:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(168,230,61,.45);}
+.btn-launch:disabled{background:rgba(255,255,255,.08);color:var(--slate);box-shadow:none;animation:none;cursor:not-allowed;}
+.btn-ghost{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:6px;font-family:'Bebas Neue',cursive;font-size:14px;letter-spacing:1px;cursor:pointer;transition:all .18s;background:transparent;border:1.5px solid rgba(45,122,58,.3);color:var(--slate);}
+.btn-ghost:hover{border-color:var(--lime);color:var(--lime);}
+
+/* QUESTIONS */
+.q-section{animation:fadeUp .45s ease both;margin-bottom:24px;}
+.cat-block{margin-bottom:18px;}
+.cat-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid rgba(45,122,58,.15);}
+.cat-badge{font-family:'Bebas Neue',cursive;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:3px 12px;border-radius:3px;}
+.cat-badge.nat{background:rgba(168,230,61,.12);color:var(--lime);border:1px solid rgba(168,230,61,.25);}
+.cat-badge.pal{background:rgba(245,200,66,.1);color:var(--amber);border:1px solid rgba(245,200,66,.25);}
+.cat-badge.pro{background:rgba(212,232,194,.08);color:var(--cream);border:1px solid rgba(212,232,194,.2);}
+.cat-badge.sta{background:rgba(232,52,42,.08);color:var(--red);border:1px solid rgba(232,52,42,.2);}
+.cat-count{font-size:10px;color:var(--slate);font-weight:700;margin-left:auto;letter-spacing:1px;}
+.q-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:7px;}
+.q-card{background:var(--pitch2);border:1.5px solid rgba(45,122,58,.15);border-radius:8px;padding:11px 13px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.q-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:transparent;transition:all .15s;}
+.q-card:hover{border-color:rgba(168,230,61,.3);background:rgba(168,230,61,.04);transform:translateY(-1px);}
+.q-card:hover::after{background:var(--lime);}
+.q-card.on{border-color:rgba(168,230,61,.4);background:rgba(168,230,61,.07);}
+.q-card.on::after{background:var(--lime);}
+.q-card.on.pal{border-color:rgba(245,200,66,.4);background:rgba(245,200,66,.06);}
+.q-card.on.pal::after{background:var(--amber);}
+.q-card.on.pro{border-color:rgba(212,232,194,.3);background:rgba(212,232,194,.05);}
+.q-card.on.pro::after{background:var(--cream);}
+.q-card.on.sta{border-color:rgba(232,52,42,.4);background:rgba(232,52,42,.06);}
+.q-card.on.sta::after{background:var(--red);}
+.q-num{font-size:8px;font-weight:800;letter-spacing:2px;color:var(--slate);margin-bottom:4px;text-transform:uppercase;}
+.q-card.on .q-num{color:var(--lime);}
+.q-card.on.pal .q-num{color:var(--amber);}
+.q-card.on.sta .q-num{color:var(--red);}
+.q-text{font-size:12px;font-weight:700;color:rgba(240,244,232,.7);line-height:1.3;}
 .q-card.on .q-text{color:var(--white);}
+
+/* VERDICT */
 .verdict-wrap{animation:fadeUp .4s ease both;}
-.verdict-card{border-radius:var(--r);overflow:hidden;border:1.5px solid rgba(255,255,255,.1);box-shadow:0 16px 60px rgba(0,0,0,.4);}
-.verdict-head{background:linear-gradient(135deg,#1a2744,#0f1c35);padding:20px 26px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;}
-.verdict-head::before{content:'VAR';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',cursive;font-size:120px;letter-spacing:8px;color:rgba(255,255,255,.03);pointer-events:none;white-space:nowrap;}
-.vh-club{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:2px;color:var(--white);display:flex;align-items:center;gap:10px;}
-.vh-q{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);margin-top:3px;max-width:520px;}
-.verdict-body{background:var(--navy);padding:26px;min-height:130px;position:relative;}
+.verdict-card{border-radius:var(--r);overflow:hidden;border:1.5px solid rgba(45,122,58,.25);box-shadow:0 12px 50px rgba(0,0,0,.4);}
+.verdict-head{
+  background:var(--pitch2);padding:18px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  border-bottom:1px solid rgba(45,122,58,.2);position:relative;overflow:hidden;
+}
+.verdict-head::before{content:'VAR';position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',cursive;font-size:100px;letter-spacing:6px;color:rgba(168,230,61,.04);pointer-events:none;}
+.verdict-head::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--grass),var(--lime),var(--grass),transparent);}
+.vh-club{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:2px;color:var(--white);display:flex;align-items:center;gap:8px;}
+.vh-q{font-size:12px;font-weight:600;color:var(--slate);margin-top:2px;}
+.verdict-body{background:var(--pitch);padding:22px;min-height:120px;position:relative;}
 .scan-wrap{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.scan-beam{position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,transparent 0%,var(--electric) 50%,transparent 100%);animation:scanDown .7s ease-in-out forwards;box-shadow:0 0 12px rgba(0,212,255,.6);}
-.scan-bg{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 8px,rgba(0,212,255,.025) 8px,rgba(0,212,255,.025) 9px);}
-.locked{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px 0;text-align:center;}
-.locked-icon{font-size:36px;}
-.locked-t{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:rgba(255,255,255,.5);}
-.locked-s{font-size:13px;color:var(--slate);}
-.rev-intro{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.rev-intro-line{width:22px;height:3px;background:var(--electric);border-radius:2px;}
-.rev-intro-text{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--slate);}
-.rev-count{background:var(--electric);color:var(--navy);font-size:10px;font-weight:800;padding:2px 8px;border-radius:10px;margin-left:4px;}
-.tags{display:flex;flex-wrap:wrap;gap:8px;}
-.tag{padding:7px 14px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.3px;animation:tagAppear .3s ease both;cursor:default;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
-.tag-blue{background:rgba(0,212,255,.12);border:1.5px solid rgba(0,212,255,.25);color:var(--electric);}
-.tag-blue:hover{background:rgba(0,212,255,.22);}
-.tag-gold{background:rgba(255,204,0,.1);border:1.5px solid rgba(255,204,0,.3);color:var(--gold);}
-.tag-gold:hover{background:rgba(255,204,0,.2);}
-.tag-lime{background:rgba(182,255,78,.1);border:1.5px solid rgba(182,255,78,.25);color:var(--lime);}
-.tag-lime:hover{background:rgba(182,255,78,.18);}
-.tag-coral{background:rgba(255,71,87,.1);border:1.5px solid rgba(255,71,87,.25);color:var(--coral);}
-.tag-coral:hover{background:rgba(255,71,87,.18);}
-.no-data-msg{font-size:13px;color:var(--slate);display:flex;align-items:center;gap:8px;}
-.empty{text-align:center;padding:70px 20px;animation:fadeUp .5s ease .2s both;}
-.empty-badge{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(182,255,78,.08));border:2px solid rgba(0,212,255,.2);display:flex;align-items:center;justify-content:center;font-size:44px;margin:0 auto 20px;}
-.empty-t{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:3px;margin-bottom:8px;}
-.empty-s{font-size:15px;color:var(--slate);font-weight:500;}
-.footer{text-align:center;margin-top:60px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.2);}
+.scan-beam{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--lime),transparent);animation:scanDown .8s ease-in-out forwards;}
+.locked{display:flex;flex-direction:column;align-items:center;gap:9px;padding:14px 0;text-align:center;}
+.locked-icon{font-size:32px;opacity:.5;}
+.locked-t{font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:2px;color:var(--slate);}
+.locked-s{font-size:12px;color:var(--slate);opacity:.7;font-weight:600;}
+.rev-intro{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
+.rev-line{width:20px;height:2px;background:var(--lime);border-radius:2px;}
+.rev-text{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--slate);}
+.rev-count{background:var(--lime);color:var(--pitch);font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;margin-left:3px;}
+.tags{display:flex;flex-wrap:wrap;gap:7px;}
+.tag{padding:6px 13px;border-radius:5px;font-size:13px;font-weight:700;letter-spacing:.3px;animation:tagIn .3s ease both;cursor:default;display:inline-flex;align-items:center;gap:6px;}
+.tag img{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.tag-nat{background:rgba(168,230,61,.1);border:1.5px solid rgba(168,230,61,.2);color:var(--lime);}
+.tag-pal{background:rgba(245,200,66,.08);border:1.5px solid rgba(245,200,66,.2);color:var(--amber);}
+.tag-pro{background:rgba(212,232,194,.07);border:1.5px solid rgba(212,232,194,.15);color:var(--cream);}
+.tag-sta{background:rgba(232,52,42,.08);border:1.5px solid rgba(232,52,42,.18);color:var(--red);}
+.no-data-msg{font-size:12px;color:var(--slate);display:flex;align-items:center;gap:7px;font-weight:600;}
+
+.empty{text-align:center;padding:60px 20px;animation:fadeUp .5s ease both;}
+.empty-badge{width:90px;height:90px;border-radius:50%;background:rgba(45,122,58,.1);border:2px solid rgba(45,122,58,.2);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 18px;}
+.empty-t{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:3px;color:var(--slate);margin-bottom:6px;}
+.empty-s{font-size:13px;color:var(--slate);opacity:.6;font-weight:600;}
+.footer{text-align:center;margin-top:60px;font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(107,143,114,.35);}
 </style>
 </head>
 <body>
 <div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script type="text/babel">
 
 const QUESTIONS=[
@@ -169,29 +203,29 @@ const QUESTIONS=[
   {id:12,cat:"pal",short:"Ballons d'Or / Podium",full:"Citez un maximum de Ballons d'Or (ou podium) passés par ce club."},
   {id:13,cat:"pal",short:"Vainqueurs Coupe de France",full:"Citez des joueurs ayant gagné la Coupe de France avec ce club."},
   {id:14,cat:"pal",short:"Meilleur Buteur championnat",full:"Citez des joueurs ayant fini Meilleur Buteur du championnat avec ce club."},
-  {id:15,cat:"pro",short:"+50 sélections nationales",full:"Citez des joueurs ayant plus de 50 sélections nationales (tous pays confondus)."},
+  {id:15,cat:"pro",short:"+50 sélections nationales",full:"Citez des joueurs ayant plus de 50 sélections nationales."},
   {id:16,cat:"pro",short:"Gardiens de but",full:"Citez des Gardiens de but passés par ce club."},
   {id:17,cat:"pro",short:"Défenseurs emblématiques",full:"Citez des Défenseurs emblématiques du club."},
   {id:18,cat:"pro",short:"Milieux de terrain",full:"Citez des Milieux de terrain célèbres du club."},
-  {id:19,cat:"pro",short:"Attaquants / Buteurs",full:"Citez des Attaquants (Buteurs) passés par ce club."},
+  {id:19,cat:"pro",short:"Attaquants / Buteurs",full:"Citez des Attaquants passés par ce club."},
   {id:20,cat:"pro",short:"Joueurs Gauchers",full:"Citez des joueurs Gauchers célèbres du club."},
   {id:21,cat:"sta",short:"+300 matchs",full:"Citez des joueurs avec plus de 300 matchs sous ce maillot."},
   {id:22,cat:"sta",short:"+100 buts",full:"Citez des joueurs avec plus de 100 buts pour ce club."},
-  {id:23,cat:"sta",short:"+5 saisons consécutives",full:"Citez des joueurs restés plus de 5 saisons consécutives au club."},
+  {id:23,cat:"sta",short:"+5 saisons consécutives",full:"Citez des joueurs restés plus de 5 saisons consécutives."},
   {id:24,cat:"sta",short:"Transfert > 20 M€",full:"Citez des joueurs achetés ou vendus pour plus de 20 M€."},
 ];
 const CAT_META={
-  nat:{label:"Nationalités",badgeCls:"cat-badge nat",tagCls:"tag-blue"},
-  pal:{label:"Palmarès",badgeCls:"cat-badge pal",tagCls:"tag-gold"},
-  pro:{label:"Profil Joueurs",badgeCls:"cat-badge pro",tagCls:"tag-lime"},
-  sta:{label:"Statistiques",badgeCls:"cat-badge sta",tagCls:"tag-coral"},
+  nat:{label:"Nationalités",badgeCls:"cat-badge nat",tagCls:"tag-nat"},
+  pal:{label:"Palmarès",badgeCls:"cat-badge pal",tagCls:"tag-pal"},
+  pro:{label:"Profil Joueurs",badgeCls:"cat-badge pro",tagCls:"tag-pro"},
+  sta:{label:"Statistiques",badgeCls:"cat-badge sta",tagCls:"tag-sta"},
 };
 const CATS=["nat","pal","pro","sta"];
 
 function App(){
-  const [db, setDb] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
+  const [db,setDb]=React.useState(null);
+  const [loading,setLoading]=React.useState(true);
+  const [error,setError]=React.useState(null);
   const [club,setClub]=React.useState(null);
   const [question,setQuestion]=React.useState(null);
   const [revealed,setRevealed]=React.useState(false);
@@ -203,33 +237,29 @@ function App(){
 
   React.useEffect(()=>{
     fetch('./database.json')
-      .then(r=>{ if(!r.ok) throw new Error('Fichier database.json introuvable ('+r.status+')'); return r.json(); })
-      .then(data=>{ setDb(data); setLoading(false); })
-      .catch(e=>{ setError(e.message); setLoading(false); });
+      .then(r=>{if(!r.ok)throw new Error('database.json introuvable ('+r.status+')');return r.json();})
+      .then(data=>{setDb(data);setLoading(false);})
+      .catch(e=>{setError(e.message);setLoading(false);});
   },[]);
 
-  const clubs = db?.clubs || [];
-  const answers = db?.answers || {};
+  const clubs=db?.clubs||[];
+  const answers=db?.answers||{};
 
   const filtered=React.useMemo(()=>{
-    if(!search) return clubs;
+    if(!search)return clubs;
     const s=search.toLowerCase();
     return clubs.filter(c=>c.name.toLowerCase().includes(s)||(c.league||'').toLowerCase().includes(s));
   },[search,clubs]);
 
   const grouped=React.useMemo(()=>{
-    const o={};
-    filtered.forEach(c=>{if(!o[c.league])o[c.league]=[];o[c.league].push(c);});
-    return o;
+    const o={};filtered.forEach(c=>{if(!o[c.league])o[c.league]=[];o[c.league].push(c);});return o;
   },[filtered]);
 
   React.useEffect(()=>{
     const fn=e=>{
-      if(dropRef.current&&!dropRef.current.contains(e.target)&&inputRef.current&&!inputRef.current.contains(e.target))
-        setDropOpen(false);
+      if(dropRef.current&&!dropRef.current.contains(e.target)&&inputRef.current&&!inputRef.current.contains(e.target))setDropOpen(false);
     };
-    document.addEventListener('mousedown',fn);
-    return()=>document.removeEventListener('mousedown',fn);
+    document.addEventListener('mousedown',fn);return()=>document.removeEventListener('mousedown',fn);
   },[]);
 
   const pickClub=c=>{setClub(c);setQuestion(null);setRevealed(false);setSearch('');setDropOpen(false);};
@@ -238,17 +268,17 @@ function App(){
   const reset=()=>{setClub(null);setQuestion(null);setRevealed(false);setSearch('');};
 
   const getAns=(cid,qid)=>{
-    if(!answers||!answers[cid]) return null;
+    if(!answers||!answers[cid])return null;
     const d=answers[cid];
-    return d[String(qid)]!==undefined ? d[String(qid)] : (d[qid]!==undefined ? d[qid] : null);
+    return d[String(qid)]!==undefined?d[String(qid)]:(d[qid]!==undefined?d[qid]:null);
   };
 
   const renderPlayer=(p,i,tagCls)=>{
-    const name = p && typeof p==='object' ? (p.name||'?') : String(p);
-    const photo = p && typeof p==='object' ? p.photo : null;
-    return (
-      <span key={i} className={`tag ${tagCls}`} style={{animationDelay:`${i*0.04}s`}}>
-        {photo&&<img src={photo} style={{width:'22px',height:'22px',borderRadius:'50%',objectFit:'cover',flexShrink:0}} onError={e=>{e.target.style.display='none';}}/>}
+    const name=p&&typeof p==='object'?(p.name||'?'):String(p);
+    const photo=p&&typeof p==='object'?p.photo:null;
+    return(
+      <span key={i} className={`tag ${tagCls}`} style={{animationDelay:`${i*.04}s`}}>
+        {photo&&<img src={photo} onError={e=>{e.target.style.display='none';}} alt=""/>}
         {name}
       </span>
     );
@@ -257,34 +287,27 @@ function App(){
   const ans=club&&question?getAns(club.id,question.id):null;
   const step=!club?1:!question?2:3;
   const qCat=question?.cat||'nat';
-  const tagCls=CAT_META[qCat]?.tagCls||'tag-blue';
+  const tagCls=CAT_META[qCat]?.tagCls||'tag-nat';
 
-  if(loading) return (
+  if(loading)return(
     <div>
       <div className="topbar">
         <div className="brand"><span className="brand-name">VAR CLUB</span><div className="brand-pipe"/><span className="mode-label">Duel VAR</span></div>
         <div className="topbar-right"><div className="live-pill"><div className="live-dot"/>LIVE</div></div>
       </div>
-      <div className="loading"><div className="spinner"/><div className="loading-text">Chargement de la base de données…</div></div>
+      <div className="loading"><div className="spinner"/><div className="loading-text">Chargement…</div></div>
     </div>
   );
 
   return(
     <div>
       <div className="topbar">
-        <div className="brand">
-          <span className="brand-name">VAR CLUB</span>
-          <div className="brand-pipe"/>
-          <span className="mode-label">Duel VAR</span>
-        </div>
+        <div className="brand"><span className="brand-name">VAR CLUB</span><div className="brand-pipe"/><span className="mode-label">Duel VAR</span></div>
         <div className="topbar-mid">
-          {club?<span className="hl">{club.flag} {club.name}</span>:<span>Sélectionnez un club pour commencer</span>}
+          {club?<span className="hl">{club.flag} {club.name}</span>:<span>Sélectionnez un club</span>}
           {question&&<><span>·</span><span>{question.short}</span></>}
         </div>
-        <div className="topbar-right">
-          <div className="live-pill"><div className="live-dot"/>LIVE</div>
-          <span className="var-pill">VAR</span>
-        </div>
+        <div className="topbar-right"><div className="live-pill"><div className="live-dot"/>LIVE</div></div>
       </div>
 
       <div className="page">
@@ -307,12 +330,8 @@ function App(){
               <div className="picker-inner">
                 <div className="search-wrap" style={{position:'relative'}}>
                   <span className="search-ico">🔍</span>
-                  <input ref={inputRef} className="search-inp"
-                    placeholder="Rechercher club ou championnat…"
-                    value={search}
-                    onChange={e=>{setSearch(e.target.value);setDropOpen(true);}}
-                    onFocus={()=>setDropOpen(true)}
-                  />
+                  <input ref={inputRef} className="search-inp" placeholder="Rechercher club ou championnat…"
+                    value={search} onChange={e=>{setSearch(e.target.value);setDropOpen(true);}} onFocus={()=>setDropOpen(true)}/>
                   {dropOpen&&(
                     <div className="dropdown" ref={dropRef}>
                       {Object.entries(grouped).map(([league,cls])=>(
@@ -320,17 +339,13 @@ function App(){
                           <div className="dg-label">{league}</div>
                           {cls.map(c=>(
                             <div key={c.id} className={`di${club?.id===c.id?' sel':''}`} onMouseDown={()=>pickClub(c)}>
-                              <span style={{fontSize:'16px'}}>{c.flag}</span>
-                              <span>{c.name}</span>
-                              {answers[c.id]
-                                ?<span className="has-data">✓ données</span>
-                                :<span className="no-data-badge">à compléter</span>
-                              }
+                              <span style={{fontSize:'15px'}}>{c.flag}</span><span>{c.name}</span>
+                              {answers[c.id]?<span className="has-data">✓ données</span>:<span className="no-data">à compléter</span>}
                             </div>
                           ))}
                         </div>
                       ))}
-                      {!Object.keys(grouped).length&&<div style={{padding:'16px',color:'var(--slate)',fontSize:'13px',textAlign:'center'}}>Aucun résultat</div>}
+                      {!Object.keys(grouped).length&&<div style={{padding:'14px',color:'var(--slate)',fontSize:'12px',textAlign:'center'}}>Aucun résultat</div>}
                     </div>
                   )}
                 </div>
@@ -339,12 +354,7 @@ function App(){
                     <span className="chip-flag">{club.flag}</span>
                     <div className="chip-info">
                       <div className="chip-name">{club.name}</div>
-                      <div className="chip-league">{club.league}
-                        {answers[club.id]
-                          ?<span style={{color:'var(--lime)',marginLeft:'8px',fontSize:'10px',fontWeight:800}}>✓ BASE COMPLÈTE</span>
-                          :<span style={{color:'var(--coral)',marginLeft:'8px',fontSize:'10px',fontWeight:700}}>· données à compléter</span>
-                        }
-                      </div>
+                      <div className="chip-league">{club.league}{answers[club.id]?<span style={{color:'var(--lime)',marginLeft:'8px',fontSize:'9px',fontWeight:800}}>✓ BASE COMPLÈTE</span>:<span style={{color:'var(--red)',marginLeft:'8px',fontSize:'9px',fontWeight:700}}>· à compléter</span>}</div>
                     </div>
                     <span className="chip-x" onClick={()=>{setClub(null);setRevealed(false);}}>×</span>
                   </div>
@@ -356,23 +366,23 @@ function App(){
           <div>
             <div className="sh"><span className="sh-num">③</span><span className="sh-label">Verdict VAR</span></div>
             <div className="status-box">
-              {!club&&<div className="status-idle">Sélectionnez un club puis une question.<br/><br/>Annoncez votre réponse à voix haute — puis <strong style={{color:'var(--electric)'}}>lancez la VAR</strong> pour vérifier.</div>}
+              {!club&&<div className="status-idle">Sélectionnez un club puis une question.<br/><br/>Annoncez votre réponse à voix haute — puis <strong style={{color:'var(--lime)'}}>lancez la VAR</strong>.</div>}
               {club&&!question&&(
                 <div style={{animation:'fadeUp .25s ease both'}}>
-                  <div style={{fontSize:'10px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',color:'var(--slate)',marginBottom:'6px'}}>Club sélectionné</div>
+                  <div style={{fontSize:'9px',fontWeight:800,letterSpacing:'2px',textTransform:'uppercase',color:'var(--slate)',marginBottom:'5px'}}>Club sélectionné</div>
                   <div className="status-club-name">{club.flag} {club.name}</div>
-                  <div style={{fontSize:'13px',color:'var(--electric)',fontWeight:600,marginTop:'8px'}}>→ Choisissez une question ci-dessous</div>
+                  <div style={{fontSize:'12px',color:'var(--lime)',fontWeight:700,marginTop:'7px',letterSpacing:'.5px'}}>→ Choisissez une question ci-dessous</div>
                 </div>
               )}
               {club&&question&&(
                 <div style={{animation:'fadeUp .25s ease both'}}>
-                  <div style={{fontSize:'10px',fontWeight:700,letterSpacing:'2px',textTransform:'uppercase',color:'var(--slate)',marginBottom:'4px'}}>Prêt pour le verdict</div>
+                  <div style={{fontSize:'9px',fontWeight:800,letterSpacing:'2px',textTransform:'uppercase',color:'var(--slate)',marginBottom:'4px'}}>Prêt pour le verdict</div>
                   <div className="status-club-name">{club.flag} {club.name}</div>
                   <div className="status-q-text">Q{question.id} — {question.short}</div>
-                  {!revealed&&!scanning&&<button className="btn-launch" onClick={launch}>▶ Lancer la VAR</button>}
-                  {scanning&&<button className="btn-launch" disabled>⏳ Analyse en cours…</button>}
+                  {!revealed&&!scanning&&<button className="btn-launch" onClick={launch}>▶ LANCER LA VAR</button>}
+                  {scanning&&<button className="btn-launch" disabled>⏳ ANALYSE…</button>}
                   {revealed&&(
-                    <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
+                    <div style={{display:'flex',gap:'8px',flexWrap:'wrap'}}>
                       <button className="btn-ghost" onClick={()=>setRevealed(false)}>↺ Masquer</button>
                       <button className="btn-ghost" onClick={()=>{setQuestion(null);setRevealed(false);}}>→ Nouvelle question</button>
                     </div>
@@ -417,18 +427,18 @@ function App(){
                   <div className="vh-q">{question.full}</div>
                 </div>
                 <div>
-                  {!revealed&&!scanning&&<button className="btn-launch" onClick={launch}>▶ Lancer la VAR</button>}
-                  {scanning&&<button className="btn-launch" disabled>⏳ Analyse…</button>}
-                  {revealed&&<button className="btn-ghost" style={{borderColor:'rgba(255,255,255,.2)',color:'rgba(255,255,255,.5)'}} onClick={()=>setRevealed(false)}>↺ Masquer</button>}
+                  {!revealed&&!scanning&&<button className="btn-launch" onClick={launch}>▶ LANCER LA VAR</button>}
+                  {scanning&&<button className="btn-launch" disabled>⏳ ANALYSE…</button>}
+                  {revealed&&<button className="btn-ghost" onClick={()=>setRevealed(false)}>↺ Masquer</button>}
                 </div>
               </div>
               <div className="verdict-body">
-                {scanning&&<div className="scan-wrap"><div className="scan-bg"/><div className="scan-beam"/></div>}
+                {scanning&&<div className="scan-wrap"><div className="scan-beam"/></div>}
                 {!revealed&&!scanning&&(
                   <div className="locked">
                     <div className="locked-icon">🔒</div>
                     <div className="locked-t">Annoncez votre réponse à voix haute</div>
-                    <div className="locked-s">Puis cliquez sur "Lancer la VAR" pour le verdict officiel</div>
+                    <div className="locked-s">Puis cliquez sur "Lancer la VAR" pour le verdict</div>
                   </div>
                 )}
                 {revealed&&(
@@ -440,8 +450,8 @@ function App(){
                     ):(
                       <>
                         <div className="rev-intro">
-                          <div className="rev-intro-line"/>
-                          <span className="rev-intro-text">Réponses de référence</span>
+                          <div className="rev-line"/>
+                          <span className="rev-text">Réponses de référence</span>
                           <span className="rev-count">{ans.length}</span>
                         </div>
                         <div className="tags">
@@ -462,12 +472,11 @@ function App(){
           </div>
         )}
 
-        <div className="footer">© VAR CLUB · Duel VAR · {clubs.length} clubs · {Object.keys(answers).length} bases complètes</div>
+        <div className="footer">© VAR Club · Duel VAR · {clubs.length} clubs · {Object.keys(answers).length} bases complètes</div>
       </div>
     </div>
   );
 }
-
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
